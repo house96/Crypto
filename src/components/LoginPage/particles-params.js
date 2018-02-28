@@ -8,7 +8,7 @@ export default {
       }
     },
     color: {
-      value: '#4db6e2'
+      value: '#000000'
     },
     shape: {
       type: 'polygon',
