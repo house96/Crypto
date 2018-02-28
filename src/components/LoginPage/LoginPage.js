@@ -1,12 +1,14 @@
 import React, { PureComponent } from 'react'
 import Particles from 'react-particles-js'
 import params from './particles-params'
+import { Redirect } from 'react-router-dom'
 import './LoginPage.css'
 import Logo from './Logo.svg'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { loginRequest, regRequest } from '../../actions/auth'
 import {
+  getIsAuthorized,
   getIsLoginFetching,
   getIsRegFetching,
   getLoginError,
@@ -15,6 +17,7 @@ import {
 
 export class LoginPage extends PureComponent {
   static propTypes = {
+    isAuthorized: PropTypes.bool.isRequired,
     isLoginLoading: PropTypes.bool.isRequired,
     isRegLoading: PropTypes.bool.isRequired,
     loginError: PropTypes.object,
@@ -24,6 +27,7 @@ export class LoginPage extends PureComponent {
   }
 
   static defaultProps = {
+    isAuthorized: false,
     loginError: null,
     regError: null,
     isLoginLoading: false,
@@ -66,7 +70,14 @@ export class LoginPage extends PureComponent {
 
   render() {
     const { isLogin, email, password } = this.state
-    const { isLoginLoading, isRegLoading, loginError, regError } = this.props
+    const {
+      isAuthorized,
+      isLoginLoading,
+      isRegLoading,
+      loginError,
+      regError
+    } = this.props
+    if (isAuthorized) return <Redirect to="/profile" />
 
     return (
       <main>
@@ -129,6 +140,7 @@ export class LoginPage extends PureComponent {
 
 export default connect(
   state => ({
+    isAuthorized: getIsAuthorized(state),
     isLoginLoading: getIsLoginFetching(state),
     isRegLoading: getIsRegFetching(state),
     loginError: getLoginError(state),
