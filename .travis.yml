@@ -12,3 +12,7 @@ script:
 branches:
   only:
   - master
+deploy:
+  provider: heroku
+  app: crypto-app-house96
+  api_key: 61c6baa3-e336-4793-9ada-c0729e9f0096
