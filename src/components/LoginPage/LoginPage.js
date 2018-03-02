@@ -1,19 +1,19 @@
-import React, { PureComponent } from 'react'
-import Particles from 'react-particles-js'
-import params from './particles-params'
-import { Redirect } from 'react-router-dom'
-import './LoginPage.css'
-import Logo from './Logo.svg'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { loginRequest, regRequest } from '../../actions/auth'
+import React, { PureComponent} from 'react';
+import Particles from 'react-particles-js';
+import params from './particles-params';
+import './LoginPage.css';
+import Logo from './Logo.svg';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { loginRequest, regRequest } from '../../actions/auth';
 import {
   getIsAuthorized,
-  getIsLoginFetching,
+  getIsLoginFetching, 
   getIsRegFetching,
   getLoginError,
   getRegError
-} from '../../reducers/auth'
+} from '../../reducers/auth';
 
 export class LoginPage extends PureComponent {
   static propTypes = {
@@ -31,7 +31,7 @@ export class LoginPage extends PureComponent {
     loginError: null,
     regError: null,
     isLoginLoading: false,
-    isRegLoading: false,
+    isRegLoading: false,    
     loginRequest: () => null,
     regRequest: () => null
   }
@@ -43,98 +43,83 @@ export class LoginPage extends PureComponent {
   }
 
   handleSubmit = event => {
-    event.preventDefault()
-    let { email, password } = this.state
+    event.preventDefault();
+    let { email, password } = this.state;
 
-    email = email.trim()
-    password = password.trim()
+    email = email.trim();
+    password = password.trim();
 
-    if (!email || !password) return
+    if (!email || !password) return;
 
     if (this.state.isLogin) {
-      this.props.loginRequest({ email, password })
+      this.props.loginRequest({ email, password });
     } else {
-      this.props.regRequest({ email, password })
+      this.props.regRequest({ email, password });
     }
   }
 
   handleChange = event => {
-    const { name, value } = event.target
-    this.setState({ [name]: value })
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
   }
 
   handleClick = event => {
-    event.preventDefault()
-    this.setState({ isLogin: !this.state.isLogin })
+    event.preventDefault();
+    this.setState({ isLogin: !this.state.isLogin });
   }
 
   render() {
-    const { isLogin, email, password } = this.state
-    const {
-      isAuthorized,
-      isLoginLoading,
-      isRegLoading,
-      loginError,
-      regError
-    } = this.props
-    if (isAuthorized) return <Redirect to="/profile" />
+    const { isLogin, email, password } = this.state;
+    const { isAuthorized, isLoginLoading, isRegLoading, loginError, regError } = this.props;
 
+    if (isAuthorized) return <Redirect to="/trade/eth" />;
+    
     return (
       <main>
         <div className="login">
           <div className="login__container">
             <div className="login__logo">
-              <img src={Logo} alt="logo" />
+              <img src={ Logo } alt="logo" />
             </div>
-            <form className="login__form" onSubmit={this.handleSubmit}>
+            <form className="login__form" onSubmit={ this.handleSubmit } >
               <div className="login__email">
                 <label htmlFor="email" />
-                <input
+                <input 
                   id="email"
-                  value={email}
-                  name="email"
-                  onChange={this.handleChange}
+                  value={ email } 
+                  name="email" 
+                  onChange={ this.handleChange } 
                   placeholder="email"
                   autoFocus
                 />
               </div>
               <div className="login__password">
                 <label htmlFor="password" />
-                <input
+                <input 
                   id="password"
-                  value={password}
-                  name="password"
-                  type="password"
-                  onChange={this.handleChange}
+                  value={ password } 
+                  name="password" 
+                  type="password" 
+                  onChange={ this.handleChange } 
                   placeholder="password"
                 />
               </div>
-              {(isLoginLoading || isRegLoading) && (
-                <p className="spinner">Подождите ...</p>
-              )}
-              {isLogin &&
-                loginError && (
-                  <p className="login__error">{loginError.message}</p>
-                )}
-              {!isLogin &&
-                regError && (
-                  <p className="login__error">{regError.message.email}</p>
-                )}
-              <button type="submit">
-                {isLogin ? 'Войти' : 'Зарегистрироваться'}
-              </button>
+              { (isLoginLoading || isRegLoading) && <p className="spinner">Подождите ...</p>}
+              { (isLogin && loginError) && <p className="login__error">{ loginError.message }</p> }
+              { (!isLogin && regError) && <p className="login__error">{ regError.message.email }</p> }
+              <button type="submit">{ isLogin ? 'Войти' : 'Зарегистрироваться' }</button>
             </form>
             <div className="login__footer">
-              {isLogin ? 'Впервые на сайте? ' : 'Уже зарегистрированы? '}
-              <a href="" onClick={this.handleClick}>
-                {isLogin ? 'Регистрация' : 'Войти'}
+              { isLogin ? 'Впервые на сайте? ' : 'Уже зарегистрированы? ' }
+              <a href="" onClick={ this.handleClick }>
+                { isLogin ? 'Регистрация' : 'Войти' }
               </a>
             </div>
           </div>
         </div>
-        <Particles params={params} />
+        <Particles params={ params } />
       </main>
-    )
+    );
   }
 }
 
@@ -150,4 +135,4 @@ export default connect(
     loginRequest,
     regRequest
   }
-)(LoginPage)
+)(LoginPage);

@@ -1,14 +1,14 @@
-import { handleActions } from 'redux-actions'
-import { combineReducers } from 'redux'
-import {
-  loginRequest,
-  loginSuccess,
+import { handleActions } from 'redux-actions';
+import { combineReducers } from 'redux';
+import { 
+  loginRequest, 
+  loginSuccess, 
   loginFailure,
   logout,
   regRequest,
   regSuccess,
   regFailure
-} from '../actions/auth'
+} from '../actions/auth';
 
 const isLoginFetching = handleActions(
   {
@@ -17,7 +17,7 @@ const isLoginFetching = handleActions(
     [loginFailure]: () => false
   },
   false
-)
+);
 
 const loginError = handleActions(
   {
@@ -25,7 +25,7 @@ const loginError = handleActions(
     [loginFailure]: (state, action) => action.payload
   },
   null
-)
+);
 
 const isRegFetching = handleActions(
   {
@@ -34,7 +34,7 @@ const isRegFetching = handleActions(
     [regFailure]: () => false
   },
   false
-)
+);
 
 const regError = handleActions(
   {
@@ -42,7 +42,7 @@ const regError = handleActions(
     [regFailure]: (state, action) => action.payload
   },
   null
-)
+);
 
 const isAuthorized = handleActions(
   {
@@ -51,13 +51,13 @@ const isAuthorized = handleActions(
     [logout]: () => false
   },
   false
-)
+);
 
-export const getIsLoginFetching = state => state.auth.isLoginFetching
-export const getLoginError = state => state.auth.loginError
-export const getIsRegFetching = state => state.auth.isRegFetching
-export const getRegError = state => state.auth.regError
-export const getIsAuthorized = state => state.auth.isAuthorized
+export const getIsLoginFetching = state => state.auth.isLoginFetching;
+export const getLoginError = state => state.auth.loginError;
+export const getIsRegFetching = state => state.auth.isRegFetching;
+export const getRegError = state => state.auth.regError;
+export const getIsAuthorized = state => state.auth.isAuthorized;
 
 export default combineReducers({
   isLoginFetching,
@@ -65,4 +65,4 @@ export default combineReducers({
   isRegFetching,
   regError,
   isAuthorized
-})
+});

@@ -1,7 +1,11 @@
-import { createActions } from 'redux-actions'
+import { createActions } from 'redux-actions';
 
 export const {
-  userInfoRequest,
-  userInfoSuccess,
-  userInfoError
-} = createActions('USER_INFO_REQUEST', 'USER_INFO_SUCCESS', 'USER_INFO_ERROR')
+  fetchUserInfoRequest,
+  fetchUserInfoSuccess,
+  fetchUserInfoFailure
+} = createActions(
+  'FETCH_USER_INFO_REQUEST', 
+  'FETCH_USER_INFO_SUCCESS', 
+  'FETCH_USER_INFO_FAILURE'
+);

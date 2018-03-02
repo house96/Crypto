@@ -1,15 +1,11 @@
-import React, { PureComponent } from 'react'
-import { compose, mapProps } from 'recompose'
-import { withRouter } from 'react-router-dom'
-import { connect } from 'react-redux'
-import {
-  getCurrentCurrencyPurchase,
-  getCurrentCurrencySell,
-  getSelectedCurrency
-} from '../../reducers/currency'
-import { buyCurrencyRequest, sellCurrencyRequest } from '../../actions/currency'
-import styled from 'styled-components'
-import { getError } from '../../reducers/wallet'
+import React, {PureComponent} from 'react';
+import {compose, mapProps} from 'recompose';
+import {withRouter} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {getCurrentCurrencyPurchase, getCurrentCurrencySell, getSelectedCurrency} from '../../reducers/currency';
+import {buyCurrencyRequest, sellCurrencyRequest} from '../../actions/currency';
+import styled from 'styled-components';
+import { getError, getIsLoading } from '../../reducers/wallet';
 
 const enhance = compose(
   withRouter,
@@ -18,12 +14,13 @@ const enhance = compose(
       currentCurrentPurchase: getCurrentCurrencyPurchase(state),
       currentCurrentSell: getCurrentCurrencySell(state),
       selectedCurrency: getSelectedCurrency(state),
-      error: getError(state)
+      error: getError(state),
+      isLoading: getIsLoading(state),
     }),
     {
       buyCurrencyRequest,
-      sellCurrencyRequest
-    }
+      sellCurrencyRequest,
+    },
   ),
   mapProps(
     ({
@@ -32,40 +29,41 @@ const enhance = compose(
       selectedCurrency,
       currentCurrentPurchase,
       currentCurrentSell,
-      error
+      error,
+      isLoading
     }) => ({
       selectedCurrency,
       buyCurrencyRequest,
       sellCurrencyRequest,
       purchase: currentCurrentPurchase,
       sell: currentCurrentSell,
-      error
-    })
-  )
-)
+      error,
+      isLoading
+    }),
+  ),
+);
 
 const Container = styled.article`
-  padding-top: 40px;
-`
+  text-align: left;
+`;
 
 const InputWrapper = styled.div`
   background-color: #f2f2f2;
   border-radius: 4px;
   display: inline-block;
   position: relative;
-  margin: 5px 0;
-  width: 218px;
-`
+  margin-bottom: 1rem;
+`;
 
 const Input = styled.input`
   background-color: transparent;
   border: none;
   text-align: right;
-  width: 100%;
-  padding: 5px 0 3px;
+  width: 13rem;
+  padding: 0.25rem;
   padding-right: 50px;
-  box-sizing: border-box;
-`
+  font-size: 1rem;
+`;
 
 const Currency = styled.span`
   position: absolute;
@@ -73,116 +71,116 @@ const Currency = styled.span`
   width: 38px;
   text-align: left;
   color: #adadad;
-  top: 5px;
-`
+  top: 3px;
+`;
 
 const Button = styled.button`
+  display: inline-block;
   width: 100px;
-  margin-left: 20px;
-  border: 0;
   color: #fff;
-  padding: 5px 0 3px;
-  border-radius: 3px;
-`
+  padding: 0.25rem 1rem;
+  margin-left: 1rem;
+  &:disabled {
+    cursor: wait;
+  }
+`;
 
 const ButtonSell = Button.extend`
   background-color: #cb5f58;
   &:hover {
     background-color: #ba564f;
   }
-`
+`;
 const ButtonPurchase = Button.extend`
   background-color: #69b3dc;
   &:hover {
     background-color: #63acd5;
   }
-`
+`;
 
 class TradeOperations extends PureComponent {
   state = {
     inputFiat: 1,
     inputSell: this.props.sell,
     inputPurchase: this.props.purchase,
-    currentInput: 'inputFiat'
-  }
+    currentInput: 'inputFiat',
+  };
 
   componentWillReceiveProps(nextProps) {
-    const { sell, purchase } = nextProps
-    const { currentInput } = this.state
-    this.changeInputs(currentInput, sell, purchase)
+    const {sell, purchase} = nextProps;
+    const {currentInput} = this.state;
+    this.changeInputs(currentInput, sell, purchase);
   }
 
   handleChange = event => {
-    const { name, value } = event.target
-    const { sell, purchase } = this.props
+    const {name, value} = event.target;
+    const {sell, purchase} = this.props;
 
-    this.setState(state => ({ [name]: value }))
-    if (isNaN(event.target.value) || event.target.value === '') return
-    else this.changeInputs(event.target.name, sell, purchase)
-  }
+    this.setState(state => ({[name]: value}));
+    if (isNaN(event.target.value) || event.target.value === '') return;
+    else this.changeInputs(event.target.name, sell, purchase);
+  };
 
   handleBlur = () => {
-    this.setState({ currentInput: 'inputFiat' })
-  }
+    this.setState({currentInput: 'inputFiat'});
+  };
 
   handleFocus = event => {
-    this.setState({ currentInput: event.target.name })
-  }
+    this.setState({currentInput: event.target.name});
+  };
 
   handleSell = event => {
-    const { selectedCurrency } = this.props
-    const { inputFiat } = this.state
-    this.props.sellCurrencyRequest({ selectedCurrency, value: inputFiat })
-  }
+    const {selectedCurrency} = this.props;
+    const {inputFiat} = this.state;
+    this.props.sellCurrencyRequest({selectedCurrency, value: inputFiat});
+  };
 
   handleBuy = event => {
-    const { selectedCurrency } = this.props
-    const { inputFiat } = this.state
-    this.props.buyCurrencyRequest({ selectedCurrency, value: inputFiat })
-  }
+    const {selectedCurrency} = this.props;
+    const {inputFiat} = this.state;
+    this.props.buyCurrencyRequest({selectedCurrency, value: inputFiat});
+  };
 
   changeInputs(name, sell, purchase) {
     switch (name) {
       case 'inputFiat': {
-        this.setState(({ inputFiat }) => {
-          const parsed = isNaN(inputFiat) ? 0 : parseFloat(inputFiat)
+        this.setState(({inputFiat}) => {
+          const parsed = isNaN(inputFiat) ? 0 : parseFloat(inputFiat);
           return {
             inputSell: parsed * sell,
-            inputPurchase: parsed * purchase
-          }
-        })
-        break
+            inputPurchase: parsed * purchase,
+          };
+        });
+        break;
       }
       case 'inputSell':
-        this.setState(({ inputSell }) => {
-          const parsedSell = isNaN(inputSell) ? 0 : parseFloat(inputSell)
-          const nextFiat = parsedSell / sell
+        this.setState(({inputSell}) => {
+          const parsedSell = isNaN(inputSell) ? 0 : parseFloat(inputSell);
+          const nextFiat = parsedSell / sell;
           return {
             inputFiat: nextFiat,
-            inputPurchase: nextFiat * purchase
-          }
-        })
-        break
+            inputPurchase: nextFiat * purchase,
+          };
+        });
+        break;
       case 'inputPurchase':
-        this.setState(({ inputPurchase }) => {
-          const parsedPurchase = isNaN(inputPurchase)
-            ? 0
-            : parseFloat(inputPurchase)
-          const nextFiat = parsedPurchase / purchase
+        this.setState(({inputPurchase}) => {
+          const parsedPurchase = isNaN(inputPurchase) ? 0 : parseFloat(inputPurchase);
+          const nextFiat = parsedPurchase / purchase;
           return {
             inputFiat: nextFiat,
-            inputSell: nextFiat * sell
-          }
-        })
-        break
+            inputSell: nextFiat * sell,
+          };
+        });
+        break;
       default:
-        break
+        break;
     }
   }
 
   render() {
-    const { error, selectedCurrency } = this.props
-    const { inputFiat, inputSell, inputPurchase } = this.state
+    const {error, selectedCurrency, isLoading} = this.props;
+    const {inputFiat, inputSell, inputPurchase} = this.state;
     return (
       <Container>
         <h2>Покупка/продажа</h2>
@@ -207,7 +205,7 @@ class TradeOperations extends PureComponent {
             />
             <Currency>$</Currency>
           </InputWrapper>
-          <ButtonSell onClick={this.handleSell}>Продать</ButtonSell>
+          <ButtonSell onClick={this.handleSell} disabled={ isLoading }>Продать</ButtonSell>
         </div>
         <div>
           <InputWrapper>
@@ -220,12 +218,12 @@ class TradeOperations extends PureComponent {
             />
             <Currency>$</Currency>
           </InputWrapper>
-          <ButtonPurchase onClick={this.handleBuy}>Купить</ButtonPurchase>
+          <ButtonPurchase onClick={this.handleBuy} disabled={ isLoading }>Купить</ButtonPurchase>
         </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {error && <p style={{color: 'red'}}>{error}</p>}
       </Container>
-    )
+    );
   }
 }
 
-export default enhance(TradeOperations)
+export default enhance(TradeOperations);

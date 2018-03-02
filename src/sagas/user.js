@@ -1,22 +1,24 @@
-import { takeLatest, call, put } from 'redux-saga/effects'
-import {
-  userInfoRequest,
-  userInfoSuccess,
-  userInfoError
-} from '../actions/user'
-import { getUserInfo } from '../api'
+import { takeLatest, call, put } from 'redux-saga/effects';
+import { 
+  fetchUserInfoRequest, 
+  fetchUserInfoSuccess, 
+  fetchUserInfoFailure 
+} from '../actions/user';
+import { getUserInfo } from '../api';
+
+export const ERROR_MESSAGE = 'Сервис недоступен';
+export const handleError = error => typeof error === 'object' ? ERROR_MESSAGE : error;
 
 export function* userWorker() {
   try {
-    const result = yield call(getUserInfo)
-    console.log(result)
-    yield put(userInfoSuccess(result))
-  } catch (error) {
-    console.log(error)
-    yield put(userInfoError(error))
+    const { data } = yield call(getUserInfo);
+    yield put(fetchUserInfoSuccess(data.result));
+  } catch(error) {
+    const errorMessage = yield call(handleError, error);
+    yield put(fetchUserInfoFailure(errorMessage));
   }
-}
+};
 
 export function* userWatcher() {
-  yield takeLatest(userInfoRequest, userWorker)
-}
+  yield takeLatest(fetchUserInfoRequest, userWorker);
+};

@@ -1,5 +1,4 @@
-html,
-body {
+html, body {
   height: 100%;
 }
 
@@ -26,18 +25,16 @@ body {
   outline: none;
 }
 
-input,
-button {
+input, button {
   outline: none;
 }
 
-input,
-button {
+input, button {
   border: 1px solid #eee;
   -webkit-appearance: none;
   -webkit-border-radius: 0;
   -moz-appearance: none;
-  appearance: none;
+  appearance: none; 
   padding: 0;
   margin: 0;
 }

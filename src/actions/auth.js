@@ -1,4 +1,4 @@
-import { createActions } from 'redux-actions'
+import { createActions } from 'redux-actions';
 
 export const {
   loginRequest,
@@ -7,12 +7,12 @@ export const {
   logout
 } = createActions(
   'LOGIN_REQUEST', 'LOGIN_SUCCESS', 'LOGIN_FAILURE', 'LOGOUT'
-)
+);
 
-export const { 
-  regRequest, 
-  regSuccess, 
-  regFailure 
+export const {
+  regRequest,
+  regSuccess,
+  regFailure
 } = createActions(
   'REG_REQUEST', 'REG_SUCCESS', 'REG_FAILURE'
-)
+);
